@@ -9,3 +9,4 @@ serial.txt
 *.log
 isodir/boot/initrd.tar
 isodir/boot/kernel.elf
+*.iso
