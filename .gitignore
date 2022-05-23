@@ -1,0 +1,11 @@
+bin/
+apps/
+initrd/
+test/
+.vscode/
+*.vhd
+bochsout.txt
+serial.txt
+*.log
+isodir/boot/initrd.tar
+isodir/boot/kernel.elf
