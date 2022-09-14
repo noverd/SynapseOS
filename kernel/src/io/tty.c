@@ -25,6 +25,8 @@ uint32_t framebuffer_width;
 uint32_t framebuffer_height;
 uint32_t framebuffer_size;
 
+uint32_t countLazySkip = 0;
+
 uint8_t *back_framebuffer_addr;
 
 volatile uint8_t tty_feedback = 1;
@@ -36,6 +38,8 @@ int32_t tty_pos_y;
 
 uint32_t tty_text_color;
 bool stateTTY = true;
+bool lazyDraw = true;
+bool mapDebugRaw = false;
 
 SynapseTTYInfo* get_tty_info() {
     SynapseTTYInfo* ty = NULL;
@@ -44,6 +48,11 @@ SynapseTTYInfo* get_tty_info() {
     ty->x = tty_pos_x;
     ty->y = tty_pos_y;
     return ty;
+}
+
+void changeDebugRaw(bool s){
+    qemu_log("[mapDebugRaw] Change mode: %s",(s?"on":"off"));
+    mapDebugRaw = s;
 }
 
 void punch() {
@@ -99,6 +108,32 @@ void tty_setcolor(int32_t color) {
     tty_text_color = color;
 }
 
+void bgaDriverInit(uint32_t x, uint32_t y, uint32_t bpp, uint32_t mount){
+    framebuffer_addr = (uint8_t *)mount;
+    //framebuffer_pitch = svga_mode->pitch;
+    framebuffer_bpp = bpp;
+    framebuffer_width = x;
+    framebuffer_height = y;
+    framebuffer_size = framebuffer_height * framebuffer_pitch;
+
+    qemu_log("[BGA] [Install] W:%d H:%d B:%d S:%d M:%x",framebuffer_width,framebuffer_height,framebuffer_bpp,framebuffer_size,framebuffer_addr);
+
+    physical_addres_t frame;
+    virtual_addr_t virt;
+
+
+    for (frame = (physical_addres_t)framebuffer_addr, virt = (virtual_addr_t)framebuffer_addr;
+        frame < (physical_addres_t)(framebuffer_addr + framebuffer_size);
+        frame += PAGE_SIZE, virt += PAGE_SIZE) {
+        vmm_map_page(frame, virt);
+    }
+   qemu_log("VBE create_back_framebuffer");
+
+   create_back_framebuffer(); // PAGE FAULT CAUSES HERE!!!
+
+
+   qemu_log("^---- OKAY");
+}
 
 /**
  * @brief Инициализация графики
@@ -113,6 +148,8 @@ void init_vbe(multiboot_info *mboot) {
     framebuffer_width = svga_mode->screen_width;
     framebuffer_height = svga_mode->screen_height;
     framebuffer_size = framebuffer_height * framebuffer_pitch;
+
+    qemu_log("[VBE] [Install] W:%d H:%d B:%d S:%d M:%x",framebuffer_width,framebuffer_height,framebuffer_bpp,framebuffer_size,framebuffer_addr);
 
     physical_addres_t frame;
     virtual_addr_t virt;
@@ -169,7 +206,7 @@ void tty_init(struct multiboot_info *mboot_info) {
     framebuffer_height = svga_mode->screen_height;
     framebuffer_size = framebuffer_height * framebuffer_pitch;
     back_framebuffer_addr = framebuffer_addr;
-    tty_printf("[Display] %dx%d@%d\n",framebuffer_width,framebuffer_height,framebuffer_pitch);
+    //tty_printf("[Display] %dx%d@%d\n",framebuffer_width,framebuffer_height,framebuffer_pitch);
 }
 
 
@@ -197,6 +234,24 @@ void tty_scroll() {
     #endif
 }
 
+uint32_t getPixel(int32_t x, int32_t y){
+    if (x < 0 || y < 0 ||
+        x >= (int) VESA_WIDTH ||
+        y >= (int) VESA_HEIGHT) {
+        return 0x000000;
+    }
+    unsigned where = x * (framebuffer_bpp / 8) + y * framebuffer_pitch;
+    #if ENABLE_DOUBLE_BUFFERING==0
+    return ((framebuffer_addr[where+2] & 0xff) << 16) + ((framebuffer_addr[where+1] & 0xff) << 8) + (framebuffer_addr[where] & 0xff);
+    #else
+    //back_framebuffer_addr
+    return ((back_framebuffer_addr[where+2] & 0xff) << 16) + ((back_framebuffer_addr[where+1] & 0xff) << 8) + (back_framebuffer_addr[where] & 0xff);
+    #endif
+}
+
+uint32_t getLazySkip(){
+    return countLazySkip;
+}
 
 /**
  * @brief Вывод одного пикселя на экран
@@ -211,7 +266,14 @@ void set_pixel(int32_t x, int32_t y, uint32_t color) {
         y >= (int) VESA_HEIGHT) {
         return;
     }
-
+    if (lazyDraw){
+        if (getPixel(x,y) == color){
+            countLazySkip++;
+            //qemu_log("[lazyDraw] Skipping paint...");
+            return;
+        }
+        // Ленивая отрисовка
+    }
     unsigned where = x * (framebuffer_bpp / 8) + y * framebuffer_pitch;
 
     #if ENABLE_DOUBLE_BUFFERING==0

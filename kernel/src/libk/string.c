@@ -321,8 +321,7 @@ uint32_t format_string_size(char *text, va_list args){
 }
 
 
-void strtolower(char* as)
-{
+void strtolower(char* as){
 	while(*as != 0)
 	{
 		if(*as >= 'A' && *as <= 'Z')
@@ -331,8 +330,7 @@ void strtolower(char* as)
 	}
 }
 
-void strtoupper(char* as)
-{
+void strtoupper(char* as){
 	while(*as != 0)
 	{
 		if(*as >= 'a' && *as <= 'z')
@@ -410,3 +408,23 @@ char *format_string(char *text, ...){
     va_end(args);
     return result;
 }
+
+bool isNumber(char * c){
+    for(uint32_t i = 0;i<strlen(c);i++){
+        if ((uint32_t) c[i] >= 48 && (uint32_t) c[i] <= 57){
+            continue;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
+
+uint32_t atoi(char s[]){
+    int i, n;
+    n = 0;
+    for (i = 0; s[i] >= '0' && s[i] <= '9'; ++i)
+        n = (n * 10) + (s[i] - '0');
+    return n;
+}
+
