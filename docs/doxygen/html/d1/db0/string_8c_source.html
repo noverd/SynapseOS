@@ -409,102 +409,120 @@ $(document).ready(function(){initNavTree('d1/db0/string_8c_source.html','../../'
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;}</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
 <div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="keywordtype">void</span> strtolower(<span class="keywordtype">char</span>* as)</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;{</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="keywordflow">while</span>(*as != 0)</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    {</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">if</span>(*as &gt;= <span class="charliteral">&#39;A&#39;</span> &amp;&amp; *as &lt;= <span class="charliteral">&#39;Z&#39;</span>)</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            *as += (<span class="charliteral">&#39;a&#39;</span> - <span class="charliteral">&#39;A&#39;</span>);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        as++;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    }</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;}</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="keywordtype">void</span> strtoupper(<span class="keywordtype">char</span>* as)</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;{</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="keywordflow">while</span>(*as != 0)</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    {</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keywordflow">if</span>(*as &gt;= <span class="charliteral">&#39;a&#39;</span> &amp;&amp; *as &lt;= <span class="charliteral">&#39;z&#39;</span>)</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;            *as -= (<span class="charliteral">&#39;a&#39;</span> - <span class="charliteral">&#39;A&#39;</span>);</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        as++;</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;}</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="keywordtype">char</span> *format_string(<span class="keywordtype">char</span> *text, ...){</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    va_list args;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    uint32_t i = 0;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    va_start(args, text);</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    uint32_t size = format_string_size(text, args);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    qemu_log(<span class="stringliteral">&quot;format:%d size&quot;</span>, size);</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="keywordtype">char</span> *result = kheap_malloc(size);</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    memset(result, 0, strlen(text));</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keywordflow">while</span> (text[i]){</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        <span class="keywordtype">char</span> res[32];</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordtype">int</span> temp_int = 0;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160; </div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">if</span> (text[i] == <span class="charliteral">&#39;%&#39;</span>){</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            i++;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            <span class="keywordflow">switch</span> (text[i]){</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                    strcat(result, va_arg(args, <span class="keywordtype">char</span>*));</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;c&#39;</span>: {</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    <span class="comment">//strcat(result, va_arg(args, char)) // Wrong!</span></div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                    result[i] = va_arg(args, <span class="keywordtype">char</span>);  <span class="comment">// Maybe correct                  </span></div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                }</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>:{</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                    temp_int = va_arg(args, <span class="keywordtype">int</span>);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                    itoa(temp_int, res);</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                    strcat(result, res);</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                }</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;i&#39;</span>:</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                    <span class="comment">//tty_putint(va_arg(args, int));</span></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;u&#39;</span>:</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                    <span class="comment">//tty_putint(va_arg(args, unsigned int));</span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;x&#39;</span>:</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                    result[i]=<span class="charliteral">&#39;!&#39;</span>;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                    <span class="comment">//tty_puthex(va_arg(args, uint32_t));</span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                    <span class="comment">//tty_puthex_v(va_arg(args, uint32_t));</span></div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                    <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;                <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                    result[i] = text[i];</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;            }</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        }</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (text[i] == 10){</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="comment">// tty_line_fill[tty_pos_y] = tty_pos_x;</span></div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            <span class="comment">// tty_pos_x = 0;</span></div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            <span class="comment">// if ((tty_pos_y + 17) &gt;= (int)VESA_HEIGHT) {</span></div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="comment">// tty_scroll();</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="comment">//} else {</span></div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            <span class="comment">// tty_pos_y += 17;</span></div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <span class="comment">//}</span></div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        }</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (text[i] == 9){</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            <span class="comment">// tty_pos_x += 4 * 17;</span></div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        }</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">else</span>{</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;            result[i] = text[i];</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        }</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        i++;</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    }</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;    va_end(args);</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;}</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="keywordtype">void</span> strtolower(<span class="keywordtype">char</span>* as){</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keywordflow">while</span>(*as != 0)</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    {</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <span class="keywordflow">if</span>(*as &gt;= <span class="charliteral">&#39;A&#39;</span> &amp;&amp; *as &lt;= <span class="charliteral">&#39;Z&#39;</span>)</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            *as += (<span class="charliteral">&#39;a&#39;</span> - <span class="charliteral">&#39;A&#39;</span>);</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        as++;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;}</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="keywordtype">void</span> strtoupper(<span class="keywordtype">char</span>* as){</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keywordflow">while</span>(*as != 0)</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    {</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keywordflow">if</span>(*as &gt;= <span class="charliteral">&#39;a&#39;</span> &amp;&amp; *as &lt;= <span class="charliteral">&#39;z&#39;</span>)</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;            *as -= (<span class="charliteral">&#39;a&#39;</span> - <span class="charliteral">&#39;A&#39;</span>);</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        as++;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    }</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;}</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="keywordtype">char</span> *format_string(<span class="keywordtype">char</span> *text, ...){</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    va_list args;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    uint32_t i = 0;</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    va_start(args, text);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    uint32_t size = format_string_size(text, args);</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    qemu_log(<span class="stringliteral">&quot;format:%d size&quot;</span>, size);</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="keywordtype">char</span> *result = kheap_malloc(size);</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    memset(result, 0, strlen(text));</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">while</span> (text[i]){</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;        <span class="keywordtype">char</span> res[32];</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keywordtype">int</span> temp_int = 0;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keywordflow">if</span> (text[i] == <span class="charliteral">&#39;%&#39;</span>){</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;            i++;</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            <span class="keywordflow">switch</span> (text[i]){</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;s&#39;</span>:</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;                    strcat(result, va_arg(args, <span class="keywordtype">char</span>*));</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;c&#39;</span>: {</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;                    <span class="comment">//strcat(result, va_arg(args, char)) // Wrong!</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;                    result[i] = va_arg(args, <span class="keywordtype">char</span>);  <span class="comment">// Maybe correct                  </span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;                }</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;d&#39;</span>:{</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                    temp_int = va_arg(args, <span class="keywordtype">int</span>);</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                    itoa(temp_int, res);</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                    strcat(result, res);</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                }</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;i&#39;</span>:</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                    <span class="comment">//tty_putint(va_arg(args, int));</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;u&#39;</span>:</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                    <span class="comment">//tty_putint(va_arg(args, unsigned int));</span></div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;x&#39;</span>:</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    result[i]=<span class="charliteral">&#39;!&#39;</span>;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                    <span class="comment">//tty_puthex(va_arg(args, uint32_t));</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                <span class="keywordflow">case</span> <span class="charliteral">&#39;v&#39;</span>:</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                    <span class="comment">//tty_puthex_v(va_arg(args, uint32_t));</span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                    result[i] = text[i];</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;            }</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;        }</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (text[i] == 10){</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            <span class="comment">// tty_line_fill[tty_pos_y] = tty_pos_x;</span></div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;            <span class="comment">// tty_pos_x = 0;</span></div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;            <span class="comment">// if ((tty_pos_y + 17) &gt;= (int)VESA_HEIGHT) {</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;            <span class="comment">// tty_scroll();</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            <span class="comment">//} else {</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="comment">// tty_pos_y += 17;</span></div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="comment">//}</span></div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        }</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (text[i] == 9){</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            <span class="comment">// tty_pos_x += 4 * 17;</span></div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        }</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        <span class="keywordflow">else</span>{</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;            result[i] = text[i];</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        }</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        i++;</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    }</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    va_end(args);</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;}</div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160; </div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="keywordtype">bool</span> isNumber(<span class="keywordtype">char</span> * c){</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keywordflow">for</span>(uint32_t i = 0;i&lt;strlen(c);i++){</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordflow">if</span> ((uint32_t) c[i] &gt;= 48 &amp;&amp; (uint32_t) c[i] &lt;= 57){</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;            <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;        }</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    }</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;}</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160; </div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;uint32_t atoi(<span class="keywordtype">char</span> s[]){</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordtype">int</span> i, n;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    n = 0;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordflow">for</span> (i = 0; s[i] &gt;= <span class="charliteral">&#39;0&#39;</span> &amp;&amp; s[i] &lt;= <span class="charliteral">&#39;9&#39;</span>; ++i)</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        n = (n * 10) + (s[i] - <span class="charliteral">&#39;0&#39;</span>);</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordflow">return</span> n;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;}</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dir_dc43877d82dd332f9fb2071fcca799d6.html">kernel</a></li><li class="navelem"><a class="el" href="../../dir_3dd30a497388ee684638f120a124721c.html">src</a></li><li class="navelem"><a class="el" href="../../dir_1a5b85ea993c03033d57d06b4ba138d9.html">libk</a></li><li class="navelem"><b>string.c</b></li>
-    <li class="footer">Документация по SayoriOS. Последние изменения: Ср 14 Сен 2022 13:48:03. Создано системой
+    <li class="footer">Документация по SayoriOS. Последние изменения: Ср 14 Сен 2022 19:34:24. Создано системой
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

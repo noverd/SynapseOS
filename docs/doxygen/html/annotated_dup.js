@@ -39,6 +39,8 @@ var annotated_dup =
     [ "SynapseTTYInfo", "d0/da1/struct_synapse_t_t_y_info.html", "d0/da1/struct_synapse_t_t_y_info" ],
     [ "tss_entry", "d5/d29/structtss__entry.html", "d5/d29/structtss__entry" ],
     [ "udp_packet", "df/def/structudp__packet.html", "df/def/structudp__packet" ],
+    [ "vbox_guest_info", "d5/d45/structvbox__guest__info.html", "d5/d45/structvbox__guest__info" ],
+    [ "vbox_header", "d5/dbe/structvbox__header.html", "d5/dbe/structvbox__header" ],
     [ "vfs_filesystem_handles_t", "d1/daa/structvfs__filesystem__handles__t.html", "d1/daa/structvfs__filesystem__handles__t" ],
     [ "vfs_filesystem_t", "d0/dad/structvfs__filesystem__t.html", "d0/dad/structvfs__filesystem__t" ],
     [ "vfs_mount_info_t", "d4/d51/structvfs__mount__info__t.html", "d4/d51/structvfs__mount__info__t" ],
