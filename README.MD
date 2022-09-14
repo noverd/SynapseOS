@@ -53,13 +53,13 @@ python3 build.py
 3. Скачиваем репозиторий с гитхаба (или самому через браузер)
 
     ```bash
-    git clone https://github.com/0Nera/SynapseOS.git
+    git clone https://github.com/pimnik98/SayoriOS.git
     ```
 
 4. Переходим в проект с папкой
 
     ```bash
-    cd SynapseOS
+    cd SayoriOS
     ```
 
 5. Запускаем компиляцию
@@ -93,7 +93,7 @@ python3 build.py
 
 3. Скачиваем репозиторий с гитхаба (или самому через браузер)
     ```bash
-    git clone https://github.com/0Nera/SynapseOS.git
+    git clone https://github.com/pimnik98/SayoriOS.git
     ```
 4. Переходим в проект с папкой
     ```bash
@@ -136,13 +136,13 @@ python3 build.py
 Простой запуск:
 
 ```bash
-qemu-system-i386 -name SynapseOS -cdrom SynapseOS.iso
+qemu-system-i386 -name SayoriOS -cdrom SayoriOS.iso
 ```
 
 С подключением устройств (Спикер, Сетевая карта RTL8139, откладочным портом в лог):
 
 ```bash
-qemu-system-i386 -name SynapseOS -soundhw pcspk -m 16 -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 -cdrom SynapseOS.iso -serial file:Qemu.log
+qemu-system-i386 -name SayoriOS -soundhw pcspk -m 16 -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 -cdrom SynapseOS.iso -serial file:Qemu.log
 ```
 
 Стандартный:
@@ -159,13 +159,7 @@ python3 build.py run
 
 ## Благодарности
 
-- <https://vk.com/id_doczom>
-- <https://github.com/rgimad>
-- <https://vk.com/kernelmode_power>
-- <https://vk.com/piminov_remont>
-- <https://vk.com/ndraey>
-- <https://vk.com/4auka228>
-- Учитель
+- Всем кто вносит в развитие проекта
 
 И другие
 
