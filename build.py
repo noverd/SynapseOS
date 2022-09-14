@@ -14,14 +14,14 @@ BIN_TARGETS = []
 BINFLDR = "bin\\" if not (sys.platform == "linux" or sys.platform == "linux2") else "bin/"
 
 def warn(message):
-    print(f"[\x1b[33;1mWARNING\x1b[0m]: {message}")
+    print(f"[\x1b[33;1mПРЕДУПРЕЖДЕНИЕ\x1b[0m]: {message}")
 
 def compile(binary, source, cur="--", total="--", warnings=False):
-    print(f"[\x1b[32;1mBUILD\x1b[0m] [{cur}/{total}]: Compiling: {source}")
+    print(f"[\x1b[32;1mСБОРКА\x1b[0m] [{cur}/{total}]: Компилируем: {source}")
     os.system(f"{CC}  {' -Wall -Wno-macro-redefined -Wno-unused-command-line-argument -Wno-implicit-function-declaration ' if warnings else ' -w '}  -o ./{binary} {source}")
     
 def compile_kernel(warnings=False):
-    print("Compiling...")
+    print("Собираем ядро...")
     if not os.path.isdir("bin"):
         os.mkdir("bin")
     if not os.path.isdir(f"bin{os.sep}kernel"):
@@ -46,12 +46,12 @@ def compile_kernel(warnings=False):
         compile(os.path.join("bin\\" if not (sys.platform == "linux" or sys.platform == "linux2") else "bin/", os.path.basename(updated[i]) + '.o '), updated[i], i+1, filescount, warnings=warnings)
 
 def link_kernel():
-    print("Linking...")
+    print("Линкуем...")
     # print(f"BIN_TARGETS = {BIN_TARGETS}")
     os.system(f"{LD} -T kernel/link.ld -nostdlib -o isodir/boot/kernel.elf " + ''.join(BIN_TARGETS))
 
 def build_kernel(warnings=False):
-    print("Building kernel at ", os.getcwd())
+    print("Сборка ядра в ", os.getcwd())
     start_time = time.time()
 
     files = glob.glob("kernel/**/*.c", recursive=True) + glob.glob("kernel/**/*.s", recursive=True)
@@ -90,7 +90,7 @@ def build_apps():
 
 
 def create_iso():
-    print("Creating ISO")
+    print("Создаем образ ISO...")
     start_time = time.time()
 
     if sys.platform == "linux" or sys.platform == "linux2": 
@@ -110,7 +110,7 @@ def run_qemu():
     
     qemu_command = f"qemu-system-i386 -name SayoriOS -soundhw pcspk -m {MEMORY}" \
         " -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 " \
-        " -cdrom SynapseOS.iso -fdb fdb.img -hda ata.vhd -serial  file:Qemu.log -d guest_errors -rtc base=localtime"
+        " -cdrom SayoriOS.iso -fdb fdb.img -hda ata.vhd -serial  file:Qemu.log -d guest_errors -rtc base=localtime"
         
     os.system(qemu_command)
 
@@ -122,7 +122,7 @@ def run_kvm():
     
     qemu_command = f"qemu-system-i386 -name SayoriOS -soundhw pcspk -device sb16 -m {MEMORY}" \
         " -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 " \
-        " -cdrom SynapseOS.iso -hda ata.vhd -serial  file:Qemu.log -accel kvm -d guest_errors -rtc base=localtime"
+        " -cdrom SayoriOS.iso -hda ata.vhd -serial  file:Qemu.log -accel kvm -d guest_errors -rtc base=localtime"
         
     os.system(qemu_command)
 
