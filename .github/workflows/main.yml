@@ -1,4 +1,4 @@
-name: SynapseOS Buildbot
+name: SayoriOS Buildbot
 
 # Контроль событий при которых будет сборка
 on:
@@ -79,8 +79,8 @@ jobs:
           description: "Внимание! Данный релиз собран из последних изменений в ядре! Это не окончательная версия содержит ошибки и не рекомендуется к запуску без проверки на виртуальной машине."
           files: |
             LICENSE
-            SynapseOS.iso
-            SynapseOS-limine.iso
+            SayoriOS.iso
+            SayoriOS-limine.iso
             isodir/boot/initrd.tar
             isodir/boot/kernel.elf
             docs/doxygen/rtf/refman.rtf
