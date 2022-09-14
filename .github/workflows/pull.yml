@@ -1,4 +1,4 @@
-name: SynapseOS Pull Requests
+name: SayoriOS Pull Requests
 
 # Контроль событий при которых будет сборка
 on:

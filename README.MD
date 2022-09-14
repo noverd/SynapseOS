@@ -3,8 +3,8 @@
 
 ![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
-SynapseOS - простая x86 операционная система на языке C с хорошо документированным ядром.
-![SynapseOS](https://raw.githubusercontent.com/0Nera/SynapseOS/master/screenshots/test.png "SynapseOS")
+SayoriOS - простая x86 операционная система на языке C с хорошо документированным ядром.
+![SayoriOS](https://raw.githubusercontent.com/0Nera/SynapseOS/master/screenshots/test.png "SynapseOS")
 
 ## Имеется
 
@@ -97,7 +97,7 @@ python3 build.py
     ```
 4. Переходим в проект с папкой
     ```bash
-    cd SynapseOS
+    cd SayoriOS
     ```
 5. Запускаем компиляцию
     Простая компиляция и запуск:
@@ -200,7 +200,7 @@ python3 build.py run
 
 ## Отказ от ответственности
 
-SynapseOS это не дистрибутив linux, это новый проект который не имеет за собой компании или организации которая могла бы дать гарантий.
-Ядро SynapseOS имеет открытый исходный код, вы можете сами удостовериться в отсутствии вредоносного ПО изучая файлы этого репозитория.
+SayoriOS это не дистрибутив linux, это новый проект который не имеет за собой компании или организации которая могла бы дать гарантий.
+Ядро SayoriOS имеет открытый исходный код, вы можете сами удостовериться в отсутствии вредоносного ПО изучая файлы этого репозитория.
 При использовании материалов вы обязуетесь соблюдать авторские права.
 Я не несу ответственности за причиненный ущерб. Используйте на свой страх и риск.

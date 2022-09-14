@@ -94,31 +94,11 @@ def create_iso():
     start_time = time.time()
 
     if sys.platform == "linux" or sys.platform == "linux2": 
-        os.system("grub-mkrescue -o \"SynapseOS.iso\" isodir/ -V SynapseOS")
+        os.system("grub-mkrescue -o \"SayoriOS.iso\" isodir/ -V SayoriOS")
     else:
-        os.system("ubuntu run grub-mkrescue -o \"SynapseOS.iso\" isodir/ -V SynapseOS ")
+        os.system("ubuntu run grub-mkrescue -o \"SayoriOS.iso\" isodir/ -V SayoriOS ")
     
     print(f"Сборка ISO/Grub образа заняла: {(time.time() - start_time):2f} сек.")
-
-
-def create_iso_l():
-    print("Creating ISO with limine")
-    start_time = time.time()
-
-    os.system("git clone https://github.com/limine-bootloader/limine.git --branch=v3.0-branch-binary --depth=1")
-    os.system("make -C limine")
-    os.system("mkdir -p iso_root")
-    os.system("""cp -v isodir/boot/kernel.elf isodir/boot/initrd.tar limine.cfg limine/limine.sys \
-        limine/limine-cd.bin limine/limine-cd-efi.bin isodir/boot/bg.bmp iso_root/
-    """)
-    os.system("""xorriso -as mkisofs -b limine-cd.bin \
-          -no-emul-boot -boot-load-size 4 -boot-info-table \
-          --efi-boot limine-cd-efi.bin \
-          -efi-boot-part --efi-boot-image --protective-msdos-label \
-          iso_root -o SynapseOS-limine.iso""")
-    os.system("./limine/limine-deploy SynapseOS-limine.iso")
-    
-    print(f"Сборка ISO/Limine образа заняла: {(time.time() - start_time):2f} сек.")
 
 
 def run_qemu():
@@ -128,19 +108,19 @@ def run_qemu():
         os.system("qemu-img create -f raw ata.vhd 32M")
     os.system("qemu-img create -f raw fdb.img 1440K")
     
-    qemu_command = f"qemu-system-i386 -name SynapseOS -soundhw pcspk -m {MEMORY}" \
+    qemu_command = f"qemu-system-i386 -name SayoriOS -soundhw pcspk -m {MEMORY}" \
         " -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 " \
         " -cdrom SynapseOS.iso -fdb fdb.img -hda ata.vhd -serial  file:Qemu.log -d guest_errors -rtc base=localtime"
         
     os.system(qemu_command)
 
 def run_kvm():
-    " Это помогает запускать SynapseOS быстрее, по сравнению с обычным режимом"
+    " Это помогает запускать SayoriOS быстрее, по сравнению с обычным режимом"
     " Paimon is not emergency food... "
     if not os.path.exists("ata.vhd"):
         os.system("qemu-img create -f raw ata.vhd 32M")
     
-    qemu_command = f"qemu-system-i386 -name SynapseOS -soundhw pcspk -device sb16 -m {MEMORY}" \
+    qemu_command = f"qemu-system-i386 -name SayoriOS -soundhw pcspk -device sb16 -m {MEMORY}" \
         " -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 " \
         " -cdrom SynapseOS.iso -hda ata.vhd -serial  file:Qemu.log -accel kvm -d guest_errors -rtc base=localtime"
         
@@ -154,7 +134,7 @@ def run_qemu_debug():
         os.system("qemu-img create -f raw ata.vhd 32M")
 
     
-    qemu_command = f"qemu-system-i386 -name SynapseOS -soundhw pcspk -m {MEMORY}" \
+    qemu_command = f"qemu-system-i386 -name SayoriOS -soundhw pcspk -m {MEMORY}" \
         " -netdev socket,id=n0,listen=:2030 -device rtl8139,netdev=n0,mac=11:11:11:11:11:11 " \
         " -d guest_errors -cdrom SynapseOS.iso -hda ata.vhd -serial  file:Qemu.log -rtc base=localtime" 
     print("gdb kernel.elf -ex \"target remote localhost:1234\"")
@@ -195,8 +175,6 @@ if __name__ == "__main__":
                     build_kernel(warnings)
                 elif sys.argv[i] == "apps":
                     build_apps()
-                elif sys.argv[i] == "isol":
-                    create_iso_l()
                 elif sys.argv[i] == "iso":
                     create_iso()
                 elif sys.argv[i] == "run":
