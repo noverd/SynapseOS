@@ -275,23 +275,7 @@ uint32_t cmd_view(uint32_t c,char* v[]){
     return 0;
 }
 
-uint32_t cmd_sbf(uint32_t c,char* v[]){
-    if (c == 0){
-        tty_printf("[CMD] [EXEC] To start batch processing, you must specify its argument.\n");
-        return 1;
-    }
-    char fname[256] = {0};
-    char *tok = (char *)strtok(cmd, " ");
-    tok = (char *)strtok(0, " "); // tok - имя файла
-    if (fname[0] == 0) {
-        sbf(tok);
-        return 0;
-    } else {
-        tty_setcolor(COLOR_ERROR);
-        tty_printf("sbf: incorrect argument\n");
-        return 1;
-    }
-}
+
 
 /**
  * @brief Функция выполнения программы
@@ -468,84 +452,3 @@ void sysinfo(){
 }
 
 
-/**
- * @brief Интерпритация языка SBF
- * 
- * @param src - код
- */
-void sbf(char *src){
-    char buffer[30000] = {0};
-    int32_t cursor = 0, loop = 0, current_char = 0;
-
-    for (int32_t i = 0; src[i] != 0; i++) {
-        switch (src[i]) {
-            case '+':
-                buffer[cursor]++;
-                break;
-            case '-':
-                buffer[cursor]--;
-                break;
-            case '>':
-                cursor++;
-                break;
-            case '<':
-                cursor--;
-                break;
-            case '.':
-                tty_putchar(buffer[cursor]);
-                break;
-            case ',':
-                buffer[cursor] = keyboard_getchar();
-                break;
-            case '[':
-                break;
-            case ']':
-                if (buffer[cursor]) {
-                    loop = 1;
-
-                    while ( loop > 0){
-                        current_char = src[--i];
-                        if (current_char == '['){
-                            loop--;
-                        } else if (current_char == ']'){
-                            loop++;
-                        }
-                    }
-                }
-                break;
-            case '0':
-                buffer[cursor] = 0;
-                break;
-            case '1':
-                buffer[cursor] = 1;
-                break;
-            case '2':
-                buffer[cursor] += 2;
-                break;
-            case '3':
-                buffer[cursor] += 3;
-                break;
-            case '4':
-                buffer[cursor] += 4;
-                break;
-            case '5':
-                buffer[cursor] += 5;
-                break;
-            case '6':
-                buffer[cursor] += 6;
-                break;
-            case '7':
-                buffer[cursor] += 7;
-                break;
-            case '8':
-                buffer[cursor] += 8;
-                break;
-            case '9':
-                buffer[cursor] += 9;
-                break;
-            
-            default:
-                break;
-        }
-    }
-}
