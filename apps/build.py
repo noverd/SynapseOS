@@ -17,8 +17,8 @@ CFLAGS = " -Wno-unused-command-line-argument -mno-sse -mno-avx -O0 -ffreestandin
 CC = f"{CC} {CFLAGS}"
 LD = f"{LD} {LDFLAGS}"
 
-print("[\x1b[32;НАСТРОЙКИ\x1b[0m] Using C compiler:", CC)
-print("[\x1b[32;НАСТРОЙКИ\x1b[0m] Using linker:", LD)
+print("[\x1b[32mНАСТРОЙКИ\x1b[0m] Using C compiler:", CC)
+print("[\x1b[32mНАСТРОЙКИ\x1b[0m] Using linker:", LD)
 
 AR = "llvm-ar"
 _O_LIBC = ["./bin/libc/stdio.o", "./bin/libc/math.o", "./bin/libc/ctype.o",
@@ -145,6 +145,18 @@ def build_all():
             print("[\x1b[31;1mERROR\x1b[0m] Binary 'fasm' not found, skipping...")
     except Exception:
         pass
+
+    extlibs = os.listdir("extlibs")
+
+    for i in extlibs:
+        print(f"[\x1b[32;1mСБОРКА\x1b[0m]: Сбока внешней библиотеки {i} ", end='')
+        os.chdir("extlibs/"+i)
+        exw = subprocess.call("make", shell=True)
+        if exw:
+            print("[FAIL]")
+        else:
+            print("[OKAY]")
+        os.chdir("../..")
 
     '''
 

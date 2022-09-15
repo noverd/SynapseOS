@@ -40,6 +40,8 @@
 #include "../include/stdint.h"
 #include "../include/stdbool.h"
 
+#define puts(str) print_str(str);
+
 int getscancode();
 char getchar();
 char *gets();
