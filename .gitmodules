@@ -1,0 +1,3 @@
+[submodule "apps/extlibs/ValeraC"]
+	path = apps/extlibs/ValeraC
+	url = https://github.com/NDRAEY/ValeraC
