@@ -1,7 +1,4 @@
 #pragma once
-
-
-
 #include <stddef.h>
 #include <stdint.h>
 #include <stdarg.h>
@@ -45,7 +42,7 @@
 
 #define VERSION_MAJOR   0       // Версия ядра
 #define VERSION_MINOR   2       // Пре-релиз 
-#define VERSION_PATCH   12       // Патч
+#define VERSION_PATCH   13       // Патч
 #define ARCH_TYPE       "i386"   // Архитектура
 
 #define COLOR_TEXT      VESA_LIGHT_GREY

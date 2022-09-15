@@ -115,6 +115,9 @@ $(document).ready(function(){initNavTree('d9/d26/kernel_8c.html','../../'); init
 <tr class="memitem:a9b447ebd4602df845bb9a6bb6fec25dd"><td class="memItemLeft" align="right" valign="top"><a id="a9b447ebd4602df845bb9a6bb6fec25dd"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>kCMD_NO_DRIVER_RTL8139</b>&#160;&#160;&#160;&quot;--nortl8139&quot;</td></tr>
 <tr class="separator:a9b447ebd4602df845bb9a6bb6fec25dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8159eda9515acdd8ca438733ca404731"><td class="memItemLeft" align="right" valign="top"><a id="a8159eda9515acdd8ca438733ca404731"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>kCMD_NO_DRIVER_BGA</b>&#160;&#160;&#160;&quot;--nobga&quot;</td></tr>
+<tr class="separator:a8159eda9515acdd8ca438733ca404731"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
@@ -139,6 +142,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>autotshell</b> = fals
 <tr class="memitem:a4750549393928f2d9eba6fd3a8ae1e55"><td class="memItemLeft" align="right" valign="top"><a id="a4750549393928f2d9eba6fd3a8ae1e55"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>rtl8139_load</b> = true</td></tr>
 <tr class="separator:a4750549393928f2d9eba6fd3a8ae1e55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a627fd9d7f3318f8ad626e8220a740"><td class="memItemLeft" align="right" valign="top"><a id="a57a627fd9d7f3318f8ad626e8220a740"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>bga_load</b> = true</td></tr>
+<tr class="separator:a57a627fd9d7f3318f8ad626e8220a740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><p>Входная точка ядра, инициализация драйверов </p>
@@ -193,7 +199,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>rtl8139_load</b> = tr
 <p>Входная точка ядра SynapseOS. </p>
 <dl class="section warning"><dt>Предупреждения</dt><dd>Отсутствует проверка multiboot! </dd></dl>
 
-<p class="definition">См. определение в файле <a class="el" href="../../d9/d26/kernel_8c_source.html">kernel.c</a> строка <a class="el" href="../../d9/d26/kernel_8c_source.html#l00062">62</a></p>
+<p class="definition">См. определение в файле <a class="el" href="../../d9/d26/kernel_8c_source.html">kernel.c</a> строка <a class="el" href="../../d9/d26/kernel_8c_source.html#l00068">68</a></p>
 
 </div>
 </div>
@@ -203,7 +209,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>rtl8139_load</b> = tr
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dir_dc43877d82dd332f9fb2071fcca799d6.html">kernel</a></li><li class="navelem"><a class="el" href="../../d9/d26/kernel_8c.html">kernel.c</a></li>
-    <li class="footer">Документация по SayoriOS. Последние изменения: Ср 14 Сен 2022 13:19:48. Создано системой
+    <li class="footer">Документация по SayoriOS. Последние изменения: Ср 14 Сен 2022 19:34:24. Создано системой
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.17 </li>
   </ul>

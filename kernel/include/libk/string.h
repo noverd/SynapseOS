@@ -13,7 +13,7 @@ int strncmp(const char *s1, const char *s2, size_t num);
 char *strtok(char *s, const char *delim);
 char *strcat(char *s, const char *t);
 
-int32_t atoi(const char*);
+uint32_t atoi(char s[]);
 
 int32_t memcmp(const void*, const void*, size_t);
 void* memmove(void* , void* , size_t);

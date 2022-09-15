@@ -41,6 +41,45 @@ void duke_get_image_data(char* filename, struct DukeImageMeta meta, char* out) {
     }
 }
 
+char duke_draw_area_from_file(char *filename, int x, int y, int sx, int sy, int width, int height) {
+    char meta[9];
+    if(vfs_exists(filename)) {
+        vfs_read(filename, 0, 9, meta);
+        struct DukeImageMeta* realmeta = (struct DukeImageMeta*)meta;
+
+        if(width>realmeta->width) { width = realmeta->width; }
+        if(height>realmeta->height) { height = realmeta->height; }
+
+        char *imagedata = kheap_malloc(realmeta->data_length);
+
+        vfs_read(filename, 9, realmeta->data_length, imagedata);
+
+        int wx = sx, wy = sy;
+        char mod = realmeta->alpha?4:3;
+
+        while(wy<(height-sy)) {
+            wx = sx;
+            while((wx-sx)<(width)) {
+                int px = pixidx(realmeta->width*mod, wx*mod, wy);
+                int r = imagedata[px];
+                int g = imagedata[px+1];
+                int b = imagedata[px+2];
+                int a = imagedata[px+3];
+                int color = ((r&0xff)<<16)|((g&0xff)<<8)|(b&0xff);
+                if(mod) {
+                    set_pixel(x+(wx-sx), y+(wy-sy), color);
+                }
+                wx++;
+            }
+            wy++;
+        }
+        kheap_free(imagedata);
+    }else{ return 1; }
+    return 0;
+}
+
+
+
 /**
  * @brief Функция отрисовки изображения
  * @param filename - Имя файла
@@ -59,7 +98,7 @@ char duke_draw_from_file(char *filename, int sx, int sy) {
 
         qemu_log("Allocating %d bytes for image", realmeta->data_length); // Это тоже пофиксило падение, но ПОЧЕМУ??? (llvm-10)
         char *imagedata = kheap_malloc(realmeta->data_length);
-        
+
         vfs_read(filename, 9, realmeta->data_length, imagedata);
 
         int x = 0, y = 0;

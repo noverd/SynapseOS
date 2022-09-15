@@ -16,11 +16,13 @@
 #define kCMD_BOOTSCREEN_DARK "--bootscreen=dark"
 #define kCMD_EXEC_TSHELL "--tshell"
 #define kCMD_NO_DRIVER_RTL8139 "--nortl8139"
+#define kCMD_NO_DRIVER_BGA "--nobga"
 
 int32_t errno = 0;
 uint32_t os_mode = 1; // 0 - мало ОЗУ, 1 - обычный режим, 2 - режим повышенной производительности, 3 - сервер
 bool autotshell = false;
 bool rtl8139_load = true;
+bool bga_load = true;
 
 void kernelCMDHandler(char* cmd){
     qemu_log("[kCMD] '%s'",cmd);
@@ -38,11 +40,15 @@ void kernelCMDHandler(char* cmd){
             autotshell = true;
             qemu_log("[kCMD] After loading the kernel, TShell will automatically start.");
             continue;
+        } else if (strcmpn(out[i],kCMD_NO_DRIVER_BGA)){
+            bga_load = false;
+            qemu_log("[kCMD] The BGA driver will not be loaded on kernel startup.");
+            continue;
         } else if (strcmpn(out[i],kCMD_NO_DRIVER_RTL8139)){
             rtl8139_load = false;
             qemu_log("[kCMD] The Realtek RTL8139 driver will not be loaded on kernel startup.");
             continue;
-        } else if (strcmpn(out[i],kCMD_BOOTSCREEN_LIGHT)){
+        }  else if (strcmpn(out[i],kCMD_BOOTSCREEN_LIGHT)){
             bootScreenChangeTheme(1);
             qemu_log("[kCMD] The Realtek RTL8139 driver will not be loaded on kernel startup.");
             continue;
@@ -67,6 +73,13 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
 
     char* kCMD = mboot_info->cmdline;
     kernelCMDHandler(kCMD);
+
+    uint32_t VBOX_FOUND = pci_read(pci_get_device(0x80EE, 0xCAFE, -1), PCI_BAR0);
+    if (VBOX_FOUND == 0){
+        qemu_log("[VBox] Error...");
+        return;
+    }
+
     // Загружаем bootScreen
     bootScreenInit(10);
     bootScreenLazy(true);
@@ -79,7 +92,6 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
 
     bootScreenPaint("Configuring the Physical Storage Manager...");
     pmm_init(mboot_info);
-
 
 
     uint32_t initrd_beg = *(uint32_t*) (mboot_info->mods_addr);     // Адрес начала ramdisk
@@ -115,12 +127,19 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
     bootScreenPaint("Identifying PCI Devices...");
     pci_init();                             // Установка драйвера PCI
 
+    if (bga_load){
+        bootScreenPaint("Initializing the BGA video adapter...");
+        bgaInit();
+        bgaTest();
+    }
+    //bootScreenPaint("Virtual Box...");
+    //vbox_guest_init();
+
     if (rtl8139_load){
         // Загружать ли драйвеп RTL8139
         bootScreenPaint("Installing the RTL-8139 network card driver...");
         unit_test(RTL8139_init());              // Тестируем драйвер RTL8139
     }
-
     vfs_mount_list();                       // Выводим список корня VFS
 
     bootScreenPaint("Determining the device's processor...");
@@ -134,7 +153,7 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
         run_elf_file("/initrd/apps/tshell", 0, 0);
     }
 
-    tty_printf("SynapseOS kernel version: %d.%d.%d, Built: %s\n\n",
+    tty_printf("SayoriOS kernel version: %d.%d.%d, Built: %s\n\n",
         VERSION_MAJOR, VERSION_MINOR, VERSION_PATCH,    // Версия ядра
         __TIMESTAMP__                                   // Время окончания компиляции ядра
     );
@@ -153,9 +172,6 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
     tty_puts("Experimental font demo: \xFF\x01 \xFF\x02 \xFF\x03 \xFF\x04 \xFF\x05 \xFF\x06 \xFF\x07 \xFF\x08 \xFF\x09 \xFF\x0A \xFF\x0B \xFF\x0C\n");
     tty_puts("Colors: \xFF\x0D\xFF\x0E\xFF\x0F\n");
     tty_puts_color("Circles: [\xFF\x10][\xFF\x11]\n", 0, 0xFF0000);
-
-    //ATA_Drive_t *drive;
-    //ATA_Detect(&drive);
 
     /* Перед тем как раскомментировать, хорошо подумайте, это создает громкий шум вместо звука
     sb16_init();
@@ -176,14 +192,27 @@ void kernel(uint32_t magic_number, struct multiboot_info *mboot_info) {
         kheap_free(fdat);
     }
     */
+    //setFontPath("/initrd/var/fonts/MicrosoftLuciaConsole18.duke","/initrd/var/fonts/MicrosoftLuciaConsole18.fdat");
+    setFontPath("/initrd/var/fonts/MicrosoftLuciaConsole9.duke","/initrd/var/fonts/MicrosoftLuciaConsole9.fdat"); // Для 9го размера
+    fontInit();
 
-    duke_draw_from_file("/initrd/res/SynapseOSLogo.duke", getWidthScreen()-100, 40);
+    //setConfigurationFont(18,22); // Для 18
+    setConfigurationFont(9,10); // Для 9
+    drawRect(0,0,800,200);
+    drawFont("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",10,30,0);
+    setColorFont(0xCAFE12);
+    drawFont("абвгдеёжзийклмнопрстуфхцчшщъыьэюя",10,60,0);
+    setColorFont(0x333333);
+    drawFont("!«№;%:?*()_+-=@#$^&[]{}|\\/",10,90,0);
+    setColorFont(0xDDDDDD);
+    drawFont("QWERTYUIOPASDFGHJKLZXCVBNM",10,120,0);
+    setColorFont(0xAAAAAA);
+    drawFont("qwertyuiopasdfghjklzxcvbnm",10,150,0);
+    setColorFont(0xFFFFFF);
+    drawFont("1234567890.,",10,180,0);
 
+
+    tty_printf("[ATOI] %d",atoi("1234567890"));
     shell();                                // Активация терминала
-    // Работает, но надо доделать
-    //run_driver_thread("/initrd/sys/shell.sea");
-    //run_driver_thread("/initrd/sys/user.sea");
-    //run_driver_thread("/initrd/sys/interface.sea");
-    //run_driver_thread("/initrd/sys/kernel.elf");
 }
 

@@ -17,8 +17,8 @@ CFLAGS = " -Wno-unused-command-line-argument -mno-sse -mno-avx -O0 -ffreestandin
 CC = f"{CC} {CFLAGS}"
 LD = f"{LD} {LDFLAGS}"
 
-print("[\x1b[32;1mCONFIGURATION\x1b[0m] Using C compiler:", CC)
-print("[\x1b[32;1mCONFIGURATION\x1b[0m] Using linker:", LD)
+print("[\x1b[32;НАСТРОЙКИ\x1b[0m] Using C compiler:", CC)
+print("[\x1b[32;НАСТРОЙКИ\x1b[0m] Using linker:", LD)
 
 AR = "llvm-ar"
 _O_LIBC = ["./bin/libc/stdio.o", "./bin/libc/math.o", "./bin/libc/ctype.o",
@@ -32,16 +32,16 @@ files = []
 # Сборка
 def build(typ, infile, outfile):
     if typ=="compile":
-        print(f"[\x1b[32;1mBUILD\x1b[0m]: Compiling {infile}")
+        print(f"[\x1b[32;1mСБОРКА\x1b[0m]: Компилируем {infile}")
         cmd = f"{CC} {infile} -o {outfile}"
         subprocess.call(cmd, shell=True)
     if typ=="link":
         # print(f"[\x1b[32mBUILD\x1b[0m]: Linking   {infile.split(" ")[0]}") # Error
-        print(f"[\x1b[32;1mBUILD\x1b[0m]: Linking  ", infile.split(" ")[0])
+        print(f"[\x1b[32;1mСБОРКА\x1b[0m]: Линкуем  ", infile.split(" ")[0])
         cmd = f"{LD} {outfile} {infile}"
         subprocess.call(cmd, shell=True)
     if typ=="copy":
-        print(f"[\x1b[34;1mCOPY\x1b[0m]: Copying  ", infile+" -> "+outfile)
+        print(f"[\x1b[34;1mКОПИРУЕМ\x1b[0m]: Копируируем  ", infile+" -> "+outfile)
         shutil.copy(infile, outfile)
 
 

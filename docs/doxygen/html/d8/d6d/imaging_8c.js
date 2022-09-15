@@ -1,6 +1,7 @@
 var imaging_8c =
 [
     [ "duke_calculate_bufsize", "d8/d6d/imaging_8c.html#afe73e6b32826b5fad72c85b5b9785b06", null ],
+    [ "duke_draw_area_from_file", "d8/d6d/imaging_8c.html#afa41fd34bd9832f50f10ff9d17cd9e9f", null ],
     [ "duke_draw_from_file", "d8/d6d/imaging_8c.html#ac43168fd2c97f024521f901f29cd7de2", null ],
     [ "duke_draw_scaled", "d8/d6d/imaging_8c.html#abf7fda803c46c30ce2eb44390e8283ae", null ],
     [ "duke_get_image_data", "d8/d6d/imaging_8c.html#a152368e41326c80549c795874292f399", null ],
