@@ -11,7 +11,7 @@ IO_OBJ = "bin/kernel/tty.o bin/kernel/vgafnt.o bin/kernel/ports.o bin/kernel/she
 INTERRUPTS_OBJ = "bin/kernel/gdt.o bin/kernel/idt.o"
 LIBK_OBJ = "bin/kernel/stdlib.o bin/kernel/string.o bin/kernel/list.o"
 
-OBJ = SYS_OBJ + " " + FS_OBJ + " " + ARCH_OBJ + " " + MEM_OBJ + " " + DRIVERS_OBJ + " " + IO_OBJ + " " + INTERRUPTS_OBJ + " " + LIBK_OBJ
+OBJ = f"{SYS_OBJ} {FS_OBJ} {ARCH_OBJ} {MEM_OBJ} {DRIVERS_OBJ} {IO_OBJ} {INTERRUPTS_OBJ} {LIBK_OBJ}"
 
 
 def build_all():
@@ -50,7 +50,7 @@ def build_all():
 
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/interrupts/gdt.c -o bin/kernel/gdt.o")
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/interrupts/idt.c -o bin/kernel/idt.o")
-    
+
 
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/libk/stdlib.c -o bin/kernel/stdlib.o")
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/libk/string.c -o bin/kernel/string.o")
@@ -60,18 +60,18 @@ def build_all():
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/sys/tss.c -o bin/kernel/tss.o")
     os.system("i686-elf-gcc -g -ffreestanding -I kernel/include/ -w -Wno-implicit-function-declaration -c kernel/src/sys/syscalls.c -o bin/kernel/syscalls.o")
 
-    os.system("i686-elf-gcc -T kernel/link.ld -w -Wno-implicit-function-declaration -nostdlib -lgcc -o isodir/boot/kernel.elf " + OBJ)
+    os.system(
+        f"i686-elf-gcc -T kernel/link.ld -w -Wno-implicit-function-declaration -nostdlib -lgcc -o isodir/boot/kernel.elf {OBJ}"
+    )
 
 
 if __name__ == "__main__":
     try:
         build_all()
 
-        if os.path.exists("ata.vhd"):
-            pass
-        else:
+        if not os.path.exists("ata.vhd"):
             os.system("qemu-img create -f raw ata.vhd 32M")
-        
+
 
         os.chdir("apps/")
         os.system("python build.py")
@@ -80,17 +80,17 @@ if __name__ == "__main__":
         shutil.copytree("../bin/apps", "../initrd/apps")
 
         os.chdir("../initrd")
-        
+
 
         with tarfile.open("../isodir/boot/initrd.tar", "w") as tar:
             for i in os.listdir():
                 tar.add(i)
-        
+
         os.chdir("../")
-        
+
         print("Creating ISO")
 
-        if sys.platform == "linux" or sys.platform == "linux2":
+        if sys.platform in ["linux", "linux2"]:
             os.system("grub-mkrescue -o \"SynapseOS.iso\" isodir/ -V SynapseOS")
         else:
             os.system("ubuntu run grub-mkrescue -o \"SynapseOS.iso\" isodir/ -V SynapseOS ")
